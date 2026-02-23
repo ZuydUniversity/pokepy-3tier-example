@@ -1,0 +1,60 @@
+services:
+  pokepy-mariadb:
+    container_name: pokepy-mariadb
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pokemon
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - pokepy_network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "192.168.56.10:3306:3306"
+
+  pokepy-backend:
+    container_name: pokepy-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DEBUG: True
+      LOG_LEVEL: info
+      DB_NAME: pokemon
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: user
+      DB_PASSWORD: password
+    networks:
+      - pokepy_network
+    ports:
+      - 8000:80
+    depends_on:
+      - pokepy-mariadb
+
+  pokepy-frontend:
+    container_name: pokepy-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 81:3000
+    environment:
+      - NODE_ENV=local
+    command: npm run dev
+    networks:
+      - pokepy_network
+    depends_on:
+      - pokepy-backend
+
+volumes:
+  mariadb_data:
+  
+networks:
+  pokepy_network:
+    external: true

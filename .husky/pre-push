@@ -1,0 +1,26 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🧪 Running tests before push..."
+
+# Test backend
+echo "  Testing backend..."
+cd backend
+python -m pytest ./src/tests/ -q
+if [ $? -ne 0 ]; then
+  echo "  ❌ Backend tests failed"
+  cd ..
+  exit 1
+fi
+
+# Test frontend
+echo "  Testing frontend..."
+cd ../frontend
+npm test -- --passWithNoTests --coverage
+if [ $? -ne 0 ]; then
+  echo "  ❌ Frontend tests failed"
+  exit 1
+fi
+cd ..
+
+echo "✅ All tests passed - ready to push!"

@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "9d691845-41a5-4ab7-9c65-596e87324bba",
+		"name": "PokePy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34831735"
+	},
+	"item": [
+		{
+			"name": "Charmander test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_prefix}}{{host}}/pokemon/4/Charmander",
+					"host": [
+						"{{url_prefix}}{{host}}"
+					],
+					"path": [
+						"pokemon",
+						"4",
+						"Charmander"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Pokemon test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_prefix}}{{host}}/pokemon/all",
+					"host": [
+						"{{url_prefix}}{{host}}"
+					],
+					"path": [
+						"pokemon",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokedex search test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_prefix}}{{host}}/pokemon/6",
+					"host": [
+						"{{url_prefix}}{{host}}"
+					],
+					"path": [
+						"pokemon",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

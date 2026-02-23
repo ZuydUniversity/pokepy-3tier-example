@@ -1,0 +1,22 @@
+# This file sets automatic reviewers for pull requests
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Backend services
+/backend/              @donovicv
+/backend/**            @donovicv
+
+# Frontend services
+/frontend/             @donovicv
+/frontend/**           @donovicv
+
+# Database
+/db/                   @donovicv
+/db/**                 @donovicv
+
+# CI/CD & Infrastructure
+/.github/              @donovicv
+/*.yml                 @donovicv
+
+# Repository files
+/README.md             @donovicv
+/CONTRIBUTING.md       @donovicv

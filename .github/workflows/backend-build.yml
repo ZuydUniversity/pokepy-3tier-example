@@ -1,0 +1,60 @@
+name: Backend Build and Push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install libmariadb3 libmariadb-dev
+        sudo apt-get -y install gcc
+        
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f backend/requirements.txt ]; then pip install --prefer-binary --no-cache-dir --upgrade -r backend/requirements.txt; fi
+
+    - name: Lint with flake8
+      working-directory: backend
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test with pytest
+      working-directory: backend
+      run: |
+        PYTHONPATH=. pytest
+        pytest ./src/tests/
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Hub
+      run: echo ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Build and push Docker image
+      working-directory: backend
+      run: |
+        docker buildx create --use
+        docker buildx build \
+          --file Dockerfile \
+          --tag donovicv/pokepy-backend:latest \
+          --push .
+
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      DOCKER_BUILDKIT: 1

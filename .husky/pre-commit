@@ -1,0 +1,25 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running linters..."
+
+# Lint frontend
+echo "  Checking frontend..."
+npm run lint --prefix frontend
+if [ $? -ne 0 ]; then
+  echo "  ❌ Frontend linting failed"
+  exit 1
+fi
+
+# Lint backend
+echo "  Checking backend..."
+cd backend
+python -m flake8 ./src/ --count --statistics
+if [ $? -ne 0 ]; then
+  echo "  ❌ Backend linting failed"
+  cd ..
+  exit 1
+fi
+cd ..
+
+echo "✅ All linters passed"

@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Pokepy OpenApi spec
+  description: 'An OpenAPI specification accessing Pokemon information.'
+  version: 0.0.1
+servers:
+  - url: http://localhost:8000/
+    description: Localhost api service
+components:
+  schemas:
+    'Pokemon':
+      type: object
+      required:
+        - display_name
+        - email
+      properties:
+        pokedexNumber:
+          type: integer
+        name:
+          type: string
+        type1:
+          type: string
+        type2:
+          type: string
+        totalStats:
+          type: integer
+        hp:
+          type: integer
+        attack:
+          type: integer
+        defense:
+          type: integer
+        spAtk:
+          type: integer
+        spDef:
+          type: integer
+        speed:
+          type: integer
+        generation:
+          type: integer
+        legendary:
+              type: boolean
+    'ErrorMessage':
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        error_code:
+          type: string
+        error_message:
+          type: string
+paths:
+  /pokemon/all:
+    get:
+      description: Gets all Pokemon
+      operationId: get_pokemon
+      responses:
+        '200':
+          description: Pokemon retrieved
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pokemon'
+        'default':
+          description: Unexpected error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /pokemon/{pokedex_number}:
+    get:
+      description: Gets all Pokemon with the specified pokedex number
+      operationId: get_pokemon_by_pokedex_number
+      parameters:
+        - in: path
+          name: pokedex_number
+          schema:
+            type: integer
+          required: true
+          description: Pokedex number of the Pokemon(s) to get
+      responses:
+        '200':
+          description: Pokemon retrieved
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pokemon'
+        'default':
+          description: Unexpected error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /pokemon/{pokedex_number}/{name}:
+    get:
+      description: Gets all Pokemon with the specified pokedex number
+      operationId: get_pokemon_by_pokedex_number_and_name
+      parameters:
+        - name: pokedex_number
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: Pokedex number of the Pokemon to get
+        - name: name
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of the Pokemon to get
+      responses:
+        '200':
+          description: Pokemon retrieved
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Pokemon'
+        'default':
+          description: Unexpected error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
