@@ -70,14 +70,14 @@ docker compose up -d pokepy-mariadb
 ```bash
 vagrant ssh backend
 cd /vagrant
-docker compose up -d pokepy-backend
+uvicorn src.main:app --host 0.0.0.0 --port 8000
 ```
 
 #### Frontend VM
 ```bash
 vagrant ssh frontend
 cd /vagrant
-docker compose up -d pokepy-frontend
+npm run dev
 ```
 
 ### 5. Access Services
